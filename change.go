@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"github.com/IntelligenceX/fileconversion/xls"
 	"io/ioutil"
@@ -9,10 +8,14 @@ import (
 )
 
 func main() {
-	dir := flag.String("n", "./", "dir")
-	flag.Parse()
+	//dir := flag.String("n", "./", "dir")
+	//flag.Parse()
 
-	files, _ := ioutil.ReadDir(*dir)
+	fmt.Println("请输入要修改的文件夹绝对地址:")
+	var dir string
+	fmt.Scanf("%s",&dir)
+
+	files, _ := ioutil.ReadDir(dir)
 	for _, i := range files {
 
 		// 读取文件名
@@ -25,13 +28,14 @@ func main() {
 		reverseName := string(r)
 
 		if len(reverseName) > 4 && reverseName[:4] == "SLX." {
-			xlFile,err := xls.Open(*dir+"/"+name,"utf-8")
+			xlFile,closer,err := xls.OpenWithCloser(dir+"/"+name,"utf-8")
 			if err!=nil{
 				fmt.Println(err)
 			}
 			sheet1 := xlFile.GetSheet(0)
 			cell := sheet1.Row(5).Col(1)
-			os.Rename(*dir+"/"+name, *dir+"/"+cell+".XLS")
+			closer.Close()
+			os.Rename(dir+"/"+name, dir+"/"+cell+".XLS")
 			fmt.Printf("修改前文件名为:%s,修改后文件名为:%s.XLS\n", name, cell)
 		}
 

@@ -20,7 +20,7 @@ func main() {
 
 		// 读取文件名
 		name := i.Name()
-		// 反转数组，判断是否为xls文件CGO_ENABLED=0 GOOS=windows  go build
+		// 反转数组，判断是否为xls文件
 		r := []rune(name)
 		for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
 			r[i], r[j] = r[j], r[i]
